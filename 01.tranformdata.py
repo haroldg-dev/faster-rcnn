@@ -58,6 +58,6 @@ for img in jpgs:
                 final_df.append(row)
             except Exception as e:
                 print(e)
-                # print(final_df)
+                print(final_df)
 df = pd.DataFrame(final_df, columns=["name_img", "image_id", "width", "height", "bbox"])
 df.to_csv("saved.csv", index=False)
