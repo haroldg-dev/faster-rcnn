@@ -7,7 +7,7 @@ import cv2
 os.chdir(r"./")
 myFiles = glob.glob("*.txt")
 # imgs = os.path.join('/home/francoxr/Downloads/kevindatos/', '*.jpg')
-imgs = os.listdir('/home/francoxr/Downloads/kevindatos/')
+imgs = os.listdir('/home/francoxr/Downloads/dataset200/')
 jpgs = []
 txts = []
 for file in imgs:
@@ -15,14 +15,11 @@ for file in imgs:
         jpgs.append(file)
     else:
         txts.append(file)
-print(jpgs)
-print(txts)
 
 final_df = []
 
 for img in jpgs:
-    path = '/home/francoxr/Downloads/kevindatos/'+ img
-    print(path)
+    path = '/home/francoxr/Downloads/dataset200/'+ img
     photo = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     dimensions = photo.shape
     height = photo.shape[0]
@@ -41,8 +38,8 @@ for img in jpgs:
             splited = line.split()
             row.append(name_img)
             row.append(image_id)
-            row.append(width)
-            row.append(height)
+            # row.append(width)
+            # row.append(height)
             try:
                 x_center = float(splited[1]) * width
                 y_center = float(splited[2]) * height
@@ -50,14 +47,19 @@ for img in jpgs:
                 d = float(splited[4]) * height
                 a = x_center - (c / 2)
                 b = y_center - (d / 2)
-                bbox_temp.append(a)
-                bbox_temp.append(b)
-                bbox_temp.append(c)
-                bbox_temp.append(d)
-                row.append(bbox_temp)
+                # bbox_temp.append(a)
+                # bbox_temp.append(b)
+                # bbox_temp.append(c)
+                # bbox_temp.append(d)
+                # row.append(bbox_temp)
+                row.append(round(a))
+                row.append(round(a+c))
+                row.append(round(b))
+                row.append(round(b+d))
                 final_df.append(row)
             except Exception as e:
                 print(e)
                 print(final_df)
-df = pd.DataFrame(final_df, columns=["name_img", "image_id", "width", "height", "bbox"])
+# df = pd.DataFrame(final_df, columns=["name_img", "image_id", "width", "height", "bbox"])
+df = pd.DataFrame(final_df, columns=["image_names", "label", "xmin", "xmax", "ymin", "ymax"])
 df.to_csv("saved.csv", index=False)
